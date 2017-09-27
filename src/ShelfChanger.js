@@ -19,14 +19,11 @@ class ShelfChanger extends Component {
   }
 
   handleChange(newShelf) {
-    if (newShelf !== 'none') {
-      this.setState({bookShelf: newShelf})
-      this.onShiftShelf(this.book, newShelf)
-    }
+    this.setState({bookShelf: newShelf})
+    this.onShiftShelf(this.book, newShelf)
   }
 
   render () {
-
     return (
       <div className="book-shelf-changer">
         <select id={this.book.id} value={this.state.bookShelf || 'none'} onChange={(event) => this.handleChange(event.target.value)}>

@@ -37,8 +37,8 @@ class SearchBook extends Component {
 			this.props.booksOnShelf.filter((bookOnShelf) => {
 				if (bookOnShelf.id === book.id) {
 					book.shelf = bookOnShelf.shelf
-					return book
 				}
+				return book
 			})
 		}
 	}
