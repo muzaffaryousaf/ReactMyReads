@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+
 import BookShelf from './BookShelf'
 
 class BooksList extends Component {
-
+	
 	render () {
-		const books = this.props.books;
-		const onShiftShelf = this.props.onShiftShelf;
+		const books = this.props.books
+		const onShiftShelf = this.props.onShiftShelf
 		
 		return ( 
 				<div className='list-books'>
@@ -24,6 +26,11 @@ class BooksList extends Component {
 			</div>
 	  )   
 	}
+}
+
+BooksList.propTypes = {
+	books: PropTypes.array.isRequired,
+	onShiftShelf: PropTypes.func.isRequired
 }
 
 export default BooksList;

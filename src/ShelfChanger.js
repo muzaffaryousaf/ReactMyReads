@@ -13,11 +13,7 @@ class ShelfChanger extends Component {
       bookShelf: this.book.shelf
     }
   }
-  static PropTypes = {
-    book: PropTypes.object.isRequired,
-    onShiftShelf: PropTypes.func.isRequired
-  }
-
+  
   handleChange(newShelf) {
     this.setState({bookShelf: newShelf})
     this.onShiftShelf(this.book, newShelf)
@@ -36,6 +32,11 @@ class ShelfChanger extends Component {
       </div>
     )
   }
+}
+
+ShelfChanger.propTypes = {
+  book: PropTypes.object.isRequired,
+  onShiftShelf: PropTypes.func.isRequired
 }
 
 export default ShelfChanger;

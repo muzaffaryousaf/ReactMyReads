@@ -6,11 +6,6 @@ import ShelfChanger from './ShelfChanger'
 
 class Book extends Component {
 
-  static PropTypes = {
-    book: PropTypes.object.isRequired,
-    onShiftShelf: PropTypes.func.isRequired
-  }
-  
   render () {
     const book = this.props.book;
     const imageLinks = book.imageLinks || {};
@@ -21,9 +16,9 @@ class Book extends Component {
         <div className="book">
           <div className="book-top">
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage:'url(' + imageLinks.thumbnail + ')'}}></div>
-              { 
-                <ShelfChanger book={book} onShiftShelf={onShiftShelf} /> 
-              }
+            { 
+              <ShelfChanger book={book} onShiftShelf={onShiftShelf} /> 
+            }
           </div>
           <div className="book-title">{book.title}</div>
           <div className="book-authors">{book.authors}</div>
@@ -33,4 +28,8 @@ class Book extends Component {
   }
 }
 
+Book.propTypes = {
+    book: PropTypes.object.isRequired,
+    onShiftShelf: PropTypes.func.isRequired
+}
 export default Book;

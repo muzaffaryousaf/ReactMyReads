@@ -6,25 +6,39 @@ import './App.css'
 import BooksList from './BooksList'
 import SearchBook from './SearchBook'
 
-
 class BooksApp extends React.Component {
   state = {
     books:[],
   }
 
   componentDidMount () {
-    this.getAll()
-  }
-
-  getAll () {
     BooksAPI.getAll().then((booksList) => {
-      this.setState({books:booksList});
+      this.setState({books:booksList})
     })
   }
 
   onShiftShelf = (book, newShelf) => {
-    BooksAPI.update(book, newShelf).then((resp) => {
-      this.getAll()
+    BooksAPI.update(book, newShelf).then(resp => {
+
+      this.setState((prevState) => {
+        let oldBooks = prevState.books
+        let bookFound = oldBooks.filter(oldBook => oldBook.id === book.id)
+    
+        if (bookFound.length < 1) { // If book is not present on shelf. Add it.
+          BooksAPI.get(book.id).then(newBook => {
+            oldBooks.push(newBook)
+            return {books: oldBooks}
+          })
+        } else { // Change the shelf
+          let updatedBooks = oldBooks.map(oldBook => {
+            if (oldBook.id === book.id) {
+              oldBook.shelf = newShelf
+            }
+            return oldBook
+          }) 
+          return {books: updatedBooks}
+        }
+      })
     })
   }
 

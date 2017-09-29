@@ -63,7 +63,15 @@ body, .app {
 }
 
 /* search page */
-
+.loading {
+  background-image: url('./icons/fidget-spinner.svg');
+  width: 70px;
+  height: 70px;
+  background-position: center;  
+  position: inherit;
+  margin: auto;
+  display: none;
+}
 .search-books-bar {
   position: fixed;
   width: 100%;
