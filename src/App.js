@@ -1,63 +1,63 @@
-import React from 'react'
-import { Route } from 'react-router-dom'
+import React from 'react';
+import { Route } from 'react-router-dom';
 
-import * as BooksAPI from './BooksAPI'
-import './App.css'
-import BooksList from './BooksList'
-import SearchBook from './SearchBook'
+import * as BooksAPI from './BooksAPI';
+import './App.css';
+import BooksList from './BooksList';
+import SearchBook from './SearchBook';
 
 class BooksApp extends React.Component {
   state = {
-    books:[],
+    books: [],
+  };
+
+  componentDidMount() {
+    BooksAPI.getAll().then(booksList => {
+      this.setState({ books: booksList });
+    });
   }
 
-  componentDidMount () {
-    BooksAPI.getAll().then((booksList) => {
-      this.setState({books:booksList})
-    })
-  }
+  handleBookShelfChange = (book, shelf) => {
+    if (book.shelf !== shelf) {
+      BooksAPI.update(book, shelf).then(() => {
+        book.shelf = shelf;
 
-  onShiftShelf = (book, newShelf) => {
-    BooksAPI.update(book, newShelf).then(resp => {
-
-      this.setState((prevState) => {
-        let oldBooks = prevState.books
-        let bookFound = oldBooks.filter(oldBook => oldBook.id === book.id)
-    
-        if (bookFound.length < 1) { // If book is not present on shelf. Add it.
-          BooksAPI.get(book.id).then(newBook => {
-            oldBooks.push(newBook)
-            return {books: oldBooks}
-          })
-        } else { // Change the shelf
-          let updatedBooks = oldBooks.map(oldBook => {
-            if (oldBook.id === book.id) {
-              oldBook.shelf = newShelf
-            }
-            return oldBook
-          }) 
-          return {books: updatedBooks}
-        }
-      })
-    })
-  }
+        // Filter out the book and append it to the end of the list
+        // so it appears at the end of whatever shelf it was added to.
+        this.setState(state => ({
+          books: state.books.filter(b => b.id !== book.id).concat([book]),
+        }));
+      });
+    }
+  };
 
   render() {
     return (
       <div className="app">
-        <Route exact path='/' render={() => (
-          <BooksList books={this.state.books} onShiftShelf={this.onShiftShelf} />
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <BooksList
+              books={this.state.books}
+              handleBookShelfChange={this.handleBookShelfChange}
+            />
           )}
         />
 
-        <Route exact path='/search' render={() => (
-          <SearchBook booksOnShelf={this.state.books} onShiftShelf={this.onShiftShelf} />
-        )}
-          
+        <Route
+          exact
+          path="/search"
+          render={() => (
+            <SearchBook
+              booksOnShelf={this.state.books}
+              handleBookShelfChange={this.handleBookShelfChange}
+            />
+          )}
         />
       </div>
-    )
+    );
   }
 }
 
-export default BooksApp
+export default BooksApp;
